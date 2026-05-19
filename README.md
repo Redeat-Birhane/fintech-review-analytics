@@ -113,6 +113,62 @@ fintech-review-analytics/
 ## Database
 
 - PostgreSQL
+ Overview
+
+This project uses PostgreSQL to store cleaned and processed fintech review data in a structured relational format.
+
+Database Schema
+
+The database consists of two tables:
+
+🏦 Banks Table
+
+Stores metadata about Ethiopian banks.
+
+CREATE TABLE banks (
+    bank_id SERIAL PRIMARY KEY,
+    bank_name VARCHAR(100) UNIQUE NOT NULL,
+    app_name VARCHAR(100)
+);
+
+
+📝 Reviews Table
+
+Stores processed customer reviews with NLP outputs.
+
+CREATE TABLE reviews (
+    review_id SERIAL PRIMARY KEY,
+    bank_id INTEGER REFERENCES banks(bank_id),
+
+    review_text TEXT NOT NULL,
+    rating INTEGER,
+    review_date DATE,
+
+    sentiment_label VARCHAR(20),
+    sentiment_score FLOAT,
+
+    identified_theme VARCHAR(100),
+
+    source VARCHAR(100)
+);
+
+📄 Schema File
+The full schema is stored in:
+schema.sql
+This file allows the database to be recreated easily.
+
+⚙️ How to Set Up Database
+1. Create Database
+CREATE DATABASE bank_reviews;
+2. Run Schema File
+psql -U postgres -d bank_reviews -f schema.sql
+3. Verify Tables
+\dt
+Expected output:
+
+banks
+reviews
+
 
 ---
 
